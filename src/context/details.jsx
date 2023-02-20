@@ -9,12 +9,13 @@ const FormProvider = ({ children }) => {
 
     useEffect(() => {
 
-        const data = Array.from({ length: 10 }, (_, i) => ({
+        const data = Array.from({ length: 6 }, (_, i) => ({
             firstName: `Shubham${i + 1}`,
             lastName: 'Pal',
-            phoneNumber: 9785632112,
+            phoneNumber: 978563211+i,
             email: `shubham${i + 1}@gmail.com`,
             username: 'haha',
+            skills: ["HTML, CSS"]
         }));
 
 
