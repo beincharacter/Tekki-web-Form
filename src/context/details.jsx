@@ -13,7 +13,8 @@ const FormProvider = ({ children }) => {
             firstName: `Shubham${i + 1}`,
             lastName: 'Pal',
             phoneNumber: 9785632112,
-            email: `shubham${i + 1}@gmail.com`
+            email: `shubham${i + 1}@gmail.com`,
+            username: 'haha',
         }));
 
 
@@ -28,13 +29,13 @@ const FormProvider = ({ children }) => {
         setFormData(updatedFormData);
     };
 
-    const handleEdit = (data) => {
+    const handledataEdit = (data) => {
         setEdit(data)
     }
 
 
     return (
-        <FormContext.Provider value={{ formData, setFormData, handleEdit, handleDelete, editableData }}>
+        <FormContext.Provider value={{ formData, setFormData, handledataEdit, handleDelete, editableData }}>
             {children}
         </FormContext.Provider>
     )
