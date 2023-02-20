@@ -58,34 +58,39 @@ const Form = () => {
         }
     };
 
-    const validateForm = (e) => {
-        e.preventDefault()
+    function validateForm() {
         console.log("inside validator")
         const errors = {};
         if (username.length < 1) errors.username = 'Please enter valid username'
-        if (phoneNumber.length !== 10) errors.phoneNumber = 'Please enter valid phone number';
+        if (phoneNumber.length !== 10) errors.phoneNumber = 'Please enter 10 digit phone number';
+        if (phoneNumber.length === 10) {
+            const existedData = formData.find((data) => {
+                if (data.phoneNumber === phoneNumber) errors.phoneNumber = "Phone number already exists"
+                return;
+            })
+        }
         if (!emailPattern.test(email)) errors.email = 'Please enter valid email';
+        if (emailPattern.test(email)) {
+            const existedData = formData.find((data) => {
+                if (data.email === email) errors.email = "Email already exists"
+            })
+        }
         if (skills.length < 2) errors.skills = 'Please select at least two skill';
         if (!fromDate) errors.fromDate = 'Please enter a start date';
         if (!toDate) errors.toDate = 'Please enter an end date';
         if (description.length === 0) errors.description = 'Please enter something here';
-        setFormErrors(errors);
-        console.log(formErrors)
+
+        return errors;
     };
 
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        validateForm(e);
-        if (username.length === 0 || email.length === 0 || phoneNumber.length === 0 || fromDate.length === 0 || toDate.length === 0 || description.length === 0) return
-        else {
-            const existedData = formData.find((data) => {
-                if (data.email === email) formErrors.email = "Email already exists"
-                if (data.phoneNumber === phoneNumber) formErrors.email = "Phone number already exists"
-                return;
-            })
-            if (existedData) return
+        let err = validateForm();
+        setFormErrors(err);
+        
+        if (Object.keys(err).length === 0) {
             console.log("submitting")
             const newFormData = {
                 firstName,
@@ -99,7 +104,8 @@ const Form = () => {
                 description
             };
 
-            // if (existedData.email.includes)
+            if(Object.keys(newFormData).lebgth < 5) return alert("haha")
+
             setFormData([...formData, newFormData]);
             setFirstName('');
             setLastName('');
@@ -110,7 +116,7 @@ const Form = () => {
             setFromDate(null);
             setToDate(null);
             setDescription('');
-            setFormErrors({});
+            setFormErrors({ });
         }
     }
 
@@ -128,20 +134,39 @@ const Form = () => {
         editableData = null
     };
 
+
+    function editValidateForm() {
+        console.log("inside validator")
+        const errors = {};
+        if (username.length < 1) errors.username = 'Please enter valid username'
+        if (phoneNumber.length !== 10) errors.phoneNumber = 'Please enter 10 digit phone number';
+        // if (phoneNumber.length === 10) {
+        //     const existedData = formData.find((data) => {
+        //         if (data.phoneNumber === phoneNumber) errors.phoneNumber = "Phone number already exists"
+        //         return;
+        //     })
+        // }
+        // if (!emailPattern.test(email)) errors.email = 'Please enter valid email';
+        // if (emailPattern.test(email)) {
+        //     const existedData = formData.find((data) => {
+        //         if (data.email === email) errors.email = "Email already exists"
+        //     })
+        // }
+        if (skills.length < 2) errors.skills = 'Please select at least two skill';
+        if (!fromDate) errors.fromDate = 'Please enter a start date';
+        if (!toDate) errors.toDate = 'Please enter an end date';
+        if (description.length === 0) errors.description = 'Please enter something here';
+
+        return errors;
+    };
+
     const handleEdit = (e) => {
         e.preventDefault();
-        validateForm(e);
-        if (username.length === 0 || email.length === 0 || phoneNumber.length === 0 || fromDate.length === 0 || toDate.length === 0 || description.length === 0) return
-        else {
-            const existedData = formData.find((data) => {
-                if (data.email === email) formErrors.email = "Email already exists"
-                if (data.phoneNumber === phoneNumber) formErrors.email = "Phone number already exists"
-                return;
-            })
-            if (existedData) return
-            console.log("submitting")
-
-
+        console.log("in handleEdit")
+        let err = editValidateForm();
+        setFormErrors(err);
+        if (Object.keys(err).length === 0) {
+            console.log("submitting");
             const updatedFormData = {
                 firstName,
                 lastName,
@@ -195,9 +220,7 @@ const Form = () => {
     return (
         <>
             <div className='form_container'>
-                <form className='form' onSubmit={
-                    editableData !== null ? handleEdit :
-                        handleSubmit} >
+                <form className='form' onSubmit={ (e) => editableData ? handleEdit(e) : handleSubmit(e)} >
                     <table>
                         <tbody>
                             <tr>
@@ -259,7 +282,7 @@ const Form = () => {
                                 <td><select
                                     className="form-control"
                                     id="skills"
-                                    value={skills}
+                                    value={skills[skills.length - 1]}
                                     onChange={(e) => addSkills(e.target.value)}
                                 // required
                                 >
@@ -273,7 +296,7 @@ const Form = () => {
                                 </select>
                                 </td>
 
-                                {formErrors.skills ? <p>{formErrors.skills}</p> : <td>{skills}</td>}
+                                {formErrors.skills ? <p>{formErrors.skills}</p> : <td>{skills.join(" ")}</td>}
 
                             </tr>
                             <tr>
@@ -321,10 +344,11 @@ const Form = () => {
                     </table>
                     <div className='btn'>
                         <button type='submit' >{editableData ? "Save" : "Submit"}</button>
-                        <button onClick={editableData ? handleCancel : handleNewRecord}>{editableData ? "Cancel" : "New form"}</button>
+                        
                     </div>
 
                 </form>
+                <button className='cancel' onClick={(e) => editableData ? handleCancel(e) : handleNewRecord(e)}>{editableData ? "Cancel" : "New form"}</button>
 
             </div>
         </>
