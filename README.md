@@ -4,7 +4,7 @@
 
 <P>You need to divide the browser screen into two equal parts. On left-hand side part, one form will display, and on the right side screen, part of the data table will display.</p>
 
-<h3The form will have the following fields which will display in the left side partition. </h3>
+<h3>The form will have the following fields which will display in the left side partition. </h3>
 
 
 <ul>
@@ -18,12 +18,12 @@
   <li>Description (Required )</li>
   <li> Submit button.</li>
   <li>New record button.</li>
-</ul
+</ul>
 
   
 <P>When the record adds successfully then the right-side table should be affected accordingly by refreshing the page and after the successful addition, form should reset as well. </p>
 
-<h3TTable fields which will display right side partition. </h3>
+<h3>Table fields which will display right side partition. </h3>
 
 
 <ul>
@@ -33,8 +33,8 @@
   <li>If the user will click on edit action then the left side form should autofill automatically and if any new change does occur then the table should be affected accordingly.</li>
   <li>User will click on the delete action then the record should delete and should remove from the table.</li>
   <li>Email filter should also be available for the data table. If the user filters the record with email then according to the filter text table record should filter and pagination should be set accordingly.</li>
-</ul
+</ul>
   
-  
+<img src="https://res.cloudinary.com/doh91aq3h/image/upload/v1676922752/gfsa.png.png" alt="project-picture" />
   
   
