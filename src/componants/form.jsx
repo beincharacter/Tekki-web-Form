@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./form.scss";
@@ -18,9 +18,23 @@ const Form = () => {
     const [description, setDescription] = useState('');
     const [formErrors, setFormErrors] = useState({});
 
-    console.log(fromDate, toDate)
-
     const { formData, setFormData, editableData, handledataEdit } = useContext(FormContext)
+
+
+    useEffect(() => {
+        if (editableData) {
+            setFirstName(editableData.firstName);
+            setLastName(editableData.lastName);
+            setEmail(editableData.email);
+            setPhoneNumber(editableData.phoneNumber);
+            setDescription(editableData.description);
+            setSkills(editableData.skills);
+            setUsername(editableData.username);
+            setFromDate(editableData.fromDate);
+            setToDate(editableData.toDate);
+        }
+    }, [editableData])
+
 
     const addSkills = (skill) => {
         if (skills.includes(skill)) return
@@ -64,8 +78,14 @@ const Form = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         validateForm(e);
-        if(username.length === 0 || email.length === 0 || phoneNumber.length === 0 || fromDate.length ===0 || toDate.length === 0 || description.length ===0 ) return 
-         else {
+        if (username.length === 0 || email.length === 0 || phoneNumber.length === 0 || fromDate.length === 0 || toDate.length === 0 || description.length === 0) return
+        else {
+            const existedData = formData.find((data) => {
+                if (data.email === email) formErrors.email = "Email already exists"
+                if (data.phoneNumber === phoneNumber) formErrors.email = "Phone number already exists"
+                return;
+            })
+            if (existedData) return
             console.log("submitting")
             const newFormData = {
                 firstName,
@@ -79,7 +99,6 @@ const Form = () => {
                 description
             };
 
-            const existedData = formData;
             // if (existedData.email.includes)
             setFormData([...formData, newFormData]);
             setFirstName('');
@@ -111,31 +130,74 @@ const Form = () => {
 
     const handleEdit = (e) => {
         e.preventDefault();
-        console.log("inside edit")
-        const newFormData = {
-            firstName,
-            lastName,
-            username,
-            phoneNumber,
-            skills,
-            email,
-            fromDate,
-            toDate,
-            description
-        };
-        console.log(newFormData)
-    }
+        validateForm(e);
+        if (username.length === 0 || email.length === 0 || phoneNumber.length === 0 || fromDate.length === 0 || toDate.length === 0 || description.length === 0) return
+        else {
+            const existedData = formData.find((data) => {
+                if (data.email === email) formErrors.email = "Email already exists"
+                if (data.phoneNumber === phoneNumber) formErrors.email = "Phone number already exists"
+                return;
+            })
+            if (existedData) return
+            console.log("submitting")
+
+
+            const updatedFormData = {
+                firstName,
+                lastName,
+                username,
+                phoneNumber,
+                skills,
+                email,
+                fromDate,
+                toDate,
+                description,
+            };
+
+            const editedDataIndex = formData.findIndex(
+                (data) => data.email === editableData.email
+            );
+
+            const updatedFormDataArray = [...formData];
+            updatedFormDataArray[editedDataIndex] = updatedFormData;
+
+            setFormData(updatedFormDataArray);
+            handledataEdit(null);
+
+            setFirstName('');
+            setLastName('');
+            setUsername('');
+            setPhoneNumber('');
+            setSkills([]);
+            setEmail('');
+            setFromDate(null);
+            setToDate(null);
+            setDescription('');
+            setFormErrors({});
+        }
+    };
 
     const handleCancel = () => {
+        setFirstName('');
+        setLastName('');
+        setUsername('');
+        setPhoneNumber('');
+        setSkills([]);
+        setEmail('');
+        setFromDate(null);
+        setToDate(null);
+        setDescription('');
+        setFormErrors({});
         handledataEdit(null)
+        setFormErrors({})
     }
 
     return (
         <>
             <div className='form_container'>
                 <form className='form' onSubmit={
-                    editableData !== null ? handleEdit : 
-                    handleSubmit} >
+                    editableData !== null ? handleEdit :
+                        handleSubmit} >
                     <table>
                         <tbody>
                             <tr>
@@ -143,7 +205,7 @@ const Form = () => {
                                 <td><input
                                     id="firstName"
                                     type="text"
-                                    value={editableData ? editableData.firstName : firstName}
+                                    value={firstName}
                                     onChange={(event) => setFirstName(event.target.value)}
                                 /></td>
                                 <td>{formErrors.firstName}</td>
@@ -153,7 +215,7 @@ const Form = () => {
                                 <td><input
                                     id="lastName"
                                     type="text"
-                                    value={editableData ? editableData.lastName : lastName}
+                                    value={lastName}
                                     onChange={(event) => setLastName(event.target.value)}
                                 /></td>
                             </tr>
@@ -163,7 +225,7 @@ const Form = () => {
                                 <td><input
                                     id="username"
                                     type="text"
-                                    value={editableData ? editableData.username : username}
+                                    value={username}
                                     onChange={(event) => setUsername(event.target.value.toLowerCase())}
                                 // required
                                 /></td>
@@ -175,7 +237,7 @@ const Form = () => {
                                     id="phoneNumber"
                                     type="tel"
                                     // pattern="[0-9]{10}"
-                                    value={editableData ? editableData.phoneNumber : phoneNumber}
+                                    value={phoneNumber}
                                     onChange={(event) => setPhoneNumber(event.target.value)}
                                 // required
                                 /></td>
@@ -197,7 +259,7 @@ const Form = () => {
                                 <td><select
                                     className="form-control"
                                     id="skills"
-                                    value={editableData ? editableData.skills : skills}
+                                    value={skills}
                                     onChange={(e) => addSkills(e.target.value)}
                                 // required
                                 >
@@ -210,16 +272,16 @@ const Form = () => {
                                     <option value="JQUERY">jQuery</option>
                                 </select>
                                 </td>
-                                
-                                {formErrors.skills ? <p>{formErrors.skills}</p> : <td>{skills.join(", ")}</td>}
-                                
+
+                                {formErrors.skills ? <p>{formErrors.skills}</p> : <td>{skills}</td>}
+
                             </tr>
                             <tr>
                                 <td><label htmlFor="experince">Experince :</label> <br /></td>
-                                <td><label htmlFor="fromDate">{formErrors.fromDate ? <red> {formErrors.fromDate}</red>: "From"}</label>
+                                <td><label htmlFor="fromDate">{formErrors.fromDate ? <red> {formErrors.fromDate}</red> : "From"}</label>
                                     <DatePicker
                                         id="fromDate"
-                                        selected={editableData ? editableData.fromDate : fromDate}
+                                        selected={fromDate}
                                         onChange={handleFromDateChange}
                                         dateFormat="dd/MM/yyyy"
                                         placeholderText="dd/mm/yyyy"
@@ -228,12 +290,12 @@ const Form = () => {
                                         yearDropdownItemNumber={10}
                                         maxDate={toDate || new Date()}
                                     /></td>
-                                    
-                                    
-                                    <td><label htmlFor="toDate">{formErrors.toDate ? <red> {formErrors.toDate}</red>: "To"}</label>
+
+
+                                <td><label htmlFor="toDate">{formErrors.toDate ? <red> {formErrors.toDate}</red> : "To"}</label>
                                     <DatePicker
                                         id="toDate"
-                                        selected={editableData ? editableData.toDate : toDate}
+                                        selected={toDate}
                                         onChange={handleToDateChange}
                                         dateFormat="dd/MM/yyyy"
                                         placeholderText="dd/mm/yyyy"
@@ -249,7 +311,7 @@ const Form = () => {
                                 <td><input
                                     id="desciption"
                                     type="text"
-                                    value={editableData ? editableData.description : description}
+                                    value={description}
                                     onChange={(event) => setDescription(event.target.value)}
                                 // required
                                 /></td>

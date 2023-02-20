@@ -9,7 +9,7 @@ const FormProvider = ({ children }) => {
 
     useEffect(() => {
 
-        const data = Array.from({ length: 10 }, (_, i) => ({
+        const data = Array.from({ length: 9 }, (_, i) => ({
             firstName: `Shubham${i + 1}`,
             lastName: 'Pal',
             phoneNumber: 9785632112,
