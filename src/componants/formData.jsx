@@ -6,7 +6,7 @@ import ReactPaginate from 'react-paginate';
 
 const FormData = () => {
 
-  const { formData, handleDelete, handleEdit } = useContext(FormContext);
+  const { formData, handleDelete, handledataEdit } = useContext(FormContext);
 
   const [currentPage, setCurrentPage] = useState(0);
   const [recordsPerPage] = useState(5);
@@ -50,14 +50,14 @@ const FormData = () => {
           </tr>
         </thead>
         <tbody>
-          {currentRecords.map(data => {
+          {currentRecords.map((data, i) => {
             return (
-              <tr key={data.id}>
+              <tr key={data+i}>
                 <td>{`${data.firstName} ${data.lastName}`}</td>
                 <td>{data.phoneNumber}</td>
                 <td>{data.email}</td>
                 <td className='btn'>
-                  <button><AiFillEdit onClick={() => handleEdit(data)} size={20} /></button>
+                  <button><AiFillEdit onClick={() => handledataEdit(data)} size={20} /></button>
                   <button onClick={() => handleDelete(data.email)}><AiFillDelete size={20} /></button>
                 </td>
               </tr>

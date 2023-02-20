@@ -25,6 +25,15 @@
       
          tr{
             border: 1px solid black;
+            red {
+               color: red;
+            }
+
+            p {
+               width: 200px;
+               position: absolute;
+               color: red;
+            }
          }
 
          td {
