@@ -7,20 +7,20 @@ const FormProvider = ({ children }) => {
     const [editableData, setEdit] = useState(null);
     console.log(editableData, " inside details context")
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const data = Array.from({ length: 6 }, (_, i) => ({
-            firstName: `Shubham${i + 1}`,
-            lastName: 'Pal',
-            phoneNumber: 978563211+i,
-            email: `shubham${i + 1}@gmail.com`,
-            username: 'haha',
-            skills: ["HTML, CSS"]
-        }));
+    //     const data = Array.from({ length: 6 }, (_, i) => ({
+    //         firstName: `Shubham${i + 1}`,
+    //         lastName: 'Pal',
+    //         phoneNumber: 978563211+i,
+    //         email: `shubham${i + 1}@gmail.com`,
+    //         username: 'haha',
+    //         skills: ["HTML, CSS"]
+    //     }));
 
 
-        setFormData(data)
-    }, []);
+    //     setFormData(data)
+    // }, []);
 
 
     const handleDelete = (id) => {

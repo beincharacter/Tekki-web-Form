@@ -164,6 +164,7 @@ const Form = () => {
         e.preventDefault();
         console.log("in handleEdit")
         let err = editValidateForm();
+        console.log(err, " err");
         setFormErrors(err);
         if (Object.keys(err).length === 0) {
             console.log("submitting");
@@ -344,7 +345,7 @@ const Form = () => {
                     </table>
                     <div className='btn'>
                         <button type='submit' >{editableData ? "Save" : "Submit"}</button>
-                        
+                        {/* <button onClick={(e) => editableData ? handleCancel(e) : handleNewRecord(e)}>{editableData ? "Cancel" : "New form"}</button> */}
                     </div>
 
                 </form>
